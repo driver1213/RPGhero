@@ -9,7 +9,7 @@ import random
 
 
 class Character:
-    def __init__(self, name, power, health, crit_hit_chance, recovery_chance, damage_chance, bounty):
+    def __init__(self, name, power, health, crit_hit_chance, recovery_chance, damage_chance, bounty, coins, armor, evade):
         self.name = name
         self.power = power
         self.health = health
@@ -17,7 +17,9 @@ class Character:
         self.recovery_chance = recovery_chance
         self.damage_chance = damage_chance
         self.bounty = bounty
-        
+        self.coins = coins
+        self.armor = armor
+        self.evade = evade
 
     def attack(self, enemy):
         if enemy.name != "Zombie":
@@ -50,8 +52,9 @@ class Character:
             print(f"{self.name} is dead.")
         
 class Hero(Character):
-
+    
     def attack(self, enemy):
+        self.coins += enemy.bounty
         crit_hit = random.random() < self.crit_hit_chance
         if crit_hit:
             enemy.health -= self.power*2
@@ -83,8 +86,7 @@ class Medic(Character):
         if recovery:
             self.health += 2
             print(f'{self.name} recovered 2 points.')
-        # elif self.health <= 0:
-        #     print(f'{self.name} is dead!')
+
 
 
 class Shadow(Character):
@@ -103,14 +105,92 @@ class Mando(Character):
         enemy.health -= self.power
         print(f'{self.name} does {self.power} damage to {enemy.name}')
 
-hero = Hero("Neo", 2, 10, 0.2, 0, 0, 0)
-goblin = Goblin("Goblin", 2, 9, 0, 0, 0, 3)
-zombie = Zombie("Zombie", 2, 8, 0, 0, 0, 4)
-medic = Medic("Medic", 2, 8, 0, 0.2, 0, 2)
-shadow = Shadow("Shadow", 2, 1, 0, 0, 0.1, 3)
-baby_yoda = Baby_Yoda("Baby Yoda", 3, 10, 0.1, 0, 0, 4)
-mando = Mando("Mando", 3, 10, 0.1, 0, 0, 4)
 
+
+class Tonic(object):
+    cost = 5
+    name = 'tonic'
+    def apply(self, character):
+        hero.health += 2
+        print(f"{hero.health}'s health increased to {hero.health}.")
+
+class SuperTonic(object):
+    cost = 10
+    name = 'super tonic'
+    def apply(self, hero):
+        hero.health += 10
+        print(f"{hero.name}'s health increased to {hero.health}.")
+
+class Armor(object):
+    cost = 10
+    name = 'armor'
+    def apply(self, hero):
+        hero.armor += 2
+        print(f"{hero.name}'s armor increased to {hero.armor}.")
+
+class Evade(object):
+    cost = 5
+    name = 'evade'
+    def apply(self, hero):
+        hero.evade += 2
+        print(f"{hero.name}'s evade increased to {hero.evade}.")
+
+class Sword(object):
+    cost = 6
+    name = 'sword'
+    def apply(self, hero):
+        hero.power += 2
+        print(f"{hero.name}'s power increased to {hero.power}.")
+
+class Tacos(object):
+    cost = 2
+    name = 'tacos'
+    def apply(self, hero):
+        hero.health += 2
+        print(f"{hero.name}'s health increased to {hero.health}.")
+
+
+
+
+
+
+class Store():
+    items = [Tonic, Sword]
+    def do_shopping(self, hero):
+        while True:
+            print("=====================")
+            print("Welcome to the store!")
+            print("=====================")
+            print(f"You have {hero.coins} coins.")
+            print("What do you want to do?")
+            for i in range(len(Store.items)):
+                item = Store.items[i]
+                print("{}. buy {} ({})".format(i + 1, item.name, item.cost))
+                print("10. leave")
+                raw_input = int(input("> "))
+            if raw_input == 10:
+                break
+            else:
+                ItemToBuy = Store.items[raw_input - 1]
+                item = ItemToBuy()
+                hero.buy(item)
+    def go_to_store(self, character):
+        store_status = int(input("Press 1. to go to the store, Press 2. to play."))
+        if store_status == 1:
+            self.do_shopping(character)
+        else:
+            exit
+
+
+
+hero = Hero("Neo", 2, 10, 0.2, 0, 0, 0, 0, 0, 0)
+goblin = Goblin("Goblin", 2, 9, 0, 0, 0, 3, 0, 0, 0)
+zombie = Zombie("Zombie", 2, 8, 0, 0, 0, 4, 0, 0, 0)
+medic = Medic("Medic", 2, 8, 0, 0.2, 0, 2, 0, 0, 0)
+shadow = Shadow("Shadow", 2, 1, 0, 0, 0.1, 3, 0, 0, 0)
+baby_yoda = Baby_Yoda("Baby Yoda", 3, 10, 0.1, 0, 0, 4, 0, 0, 0)
+mando = Mando("Mando", 3, 10, 0.1, 0, 0, 4, 0, 0, 0)
+store = Store()
 
 
 
@@ -120,8 +200,8 @@ def main(enemy):
     
 
     while enemy.alive() > 0 and hero.alive(): #and zombie.alive() and shadow.alive() and medic.alive():
-        hero.print_status()  #print("You have {} health and {} power.".format(hero.health, hero.power))
-        enemy.print_status() # goblin.print_status()  #print("The goblin has {} health and {} power.".format(goblin.health, goblin.power))
+        # hero.print_status()  #print("You have {} health and {} power.".format(hero.health, hero.power))
+        # enemy.print_status() # goblin.print_status()  #print("The goblin has {} health and {} power.".format(goblin.health, goblin.power))
         # zombie.print_status()
         # shadow.print_status()
         # medic.print_status()
@@ -130,18 +210,19 @@ def main(enemy):
         print(f"1. fight {enemy.name}")
         print("2. do nothing")
         print("3. flee or fight someone else")
-
+        print("4. go to store")
         print("> ", end=' ')
         raw_input = input()
         if raw_input == "1":
             # Hero attacks goblin
             hero.attack(enemy)
+            enemy.print_status()
             # Goblin attacks hero
             enemy.attack(hero)
+            hero.print_status()
             if enemy.health <= 0:
-                hero.bounty += enemy.bounty
-                
-                print(f'{enemy.name} is dead! You got {enemy.bounty} coins.')
+                print(f'You got {enemy.bounty} coins.')
+                hero.coins += enemy.bounty
             elif hero.health <= 0:
                 print(f'{hero.name} died!')
         elif raw_input == "2":
@@ -152,7 +233,9 @@ def main(enemy):
         elif raw_input == "3":
             print("Goodbye.")
             break
-        
+        elif raw_input == "4":
+            print(f'You have {hero.coins} coins.What would you like to buy?')
+            store.go_to_store(hero)
 
         else:
             print("Invalid input {}".format(raw_input))
@@ -163,3 +246,9 @@ main(zombie)
 main(shadow)
 main(baby_yoda)
 main(mando)
+
+
+
+
+
+
