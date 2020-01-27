@@ -64,6 +64,9 @@ class Hero(Character):
             enemy.health -= self.power
             print(f"{self.name} does {self.power} damage to {enemy.name}.")
 
+    def buy(self, item):
+        item.apply(self)
+
 class Goblin(Character):
     def attack(self, enemy):
         enemy.health -= self.power
@@ -110,7 +113,7 @@ class Mando(Character):
 class Tonic(object):
     cost = 5
     name = 'tonic'
-    def apply(self, character):
+    def apply(self, hero):
         hero.health += 2
         print(f"{hero.health}'s health increased to {hero.health}.")
 
@@ -155,7 +158,7 @@ class Tacos(object):
 
 
 class Store():
-    items = [Tonic, Sword]
+    items = [Tonic, SuperTonic, Armor, Evade, Sword, Tacos]
     def do_shopping(self, hero):
         while True:
             print("=====================")
@@ -167,7 +170,7 @@ class Store():
                 item = Store.items[i]
                 print("{}. buy {} ({})".format(i + 1, item.name, item.cost))
                 print("10. leave")
-                raw_input = int(input("> "))
+            raw_input = int(input("> "))
             if raw_input == 10:
                 break
             else:
