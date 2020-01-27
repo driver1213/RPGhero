@@ -105,64 +105,77 @@ goblin = Goblin("Goblin", 2, 9, 0, 0, 0)
 zombie = Zombie("Zombie", 2, 8, 0, 0, 0)
 medic = Medic("Medic", 2, 8, 0, 0.2, 0)
 shadow = Shadow("Shadow", 2, 1, 0, 0, 0.1)
+baby_yoda = Baby_Yoda("Baby Yoda", 5, 10, 0.1, 0, 0)
 
 
 
 
 
-def main():
+
+def main(enemy):
     
 
-    while goblin.alive() and hero.alive() and zombie.alive() and shadow.alive() and medic.alive():
+    while enemy.alive() > 0 and hero.alive(): #and zombie.alive() and shadow.alive() and medic.alive():
         hero.print_status()  #print("You have {} health and {} power.".format(hero.health, hero.power))
-        # goblin.print_status()  #print("The goblin has {} health and {} power.".format(goblin.health, goblin.power))
+        enemy.print_status() # goblin.print_status()  #print("The goblin has {} health and {} power.".format(goblin.health, goblin.power))
         # zombie.print_status()
         # shadow.print_status()
         # medic.print_status()
         print()
         print("What do you want to do?")
-        print("1. fight goblin")
+        print(f"1. fight {enemy.name}")
         print("2. do nothing")
-        print("3. flee")
-        print("4. fight zombie")
-        print("5. fight medic")
-        print("6. fight shadow")
+        print("3. flee or fight someone else")
+        # print("4. fight zombie")
+        # print("5. fight medic")
+        # print("6. fight shadow")
+        # print("7. fight baby yoda")
         print("> ", end=' ')
         raw_input = input()
         if raw_input == "1":
             # Hero attacks goblin
-            hero.attack(goblin)
+            hero.attack(enemy)
             # Goblin attacks hero
-            goblin.attack(hero)
-            goblin.print_status()
+            # enemy.attack(hero)
+            if enemy.health <= 0:
+                print(f'{enemy.name} is dead!')
+            
         elif raw_input == "2":
-            hero.health -= goblin.power
+            hero.health -= enemy.power
             print('You wimp!')
             if hero.health <=0:
                 print('You are dead!')
         elif raw_input == "3":
             print("Goodbye.")
             break
-        elif raw_input == "4":
-            #Hero attacks Zombie
-            hero.attack(zombie)
-            print('You can\'t hurt Zombie!')
-            #Zombie attacks Hero
-            zombie.attack(hero)
+        # elif raw_input == "4":
+        #     #Hero attacks Zombie
+        #     hero.attack(zombie)
+        #     print('You can\'t hurt Zombie!')
+        #     #Zombie attacks Hero
+        #     zombie.attack(hero)
             
-        elif raw_input == "5":
-            #Hero attacks Medic
-            hero.attack(medic)
-            #Medic attacks Hero
-            medic.attack(hero)
+        # elif raw_input == "5":
+        #     #Hero attacks Medic
+        #     hero.attack(medic)
+        #     #Medic attacks Hero
+        #     medic.attack(hero)
             
-        elif raw_input == "6":
+        # elif raw_input == "6":
             
-            shadow.attack(hero)
-            shadow.print_status()
-            if hero.health <= 0:
-                print('You are dead!')
+        #     shadow.attack(hero)
+        #     shadow.print_status()
+        #     if hero.health <= 0:
+        #         print('You are dead!')
+
+        # elif raw_input == "7":
+        #     baby_yoda.attack(hero)
+
         else:
             print("Invalid input {}".format(raw_input))
 
-main()
+main(goblin)
+main(medic)
+main(zombie)
+main(shadow)
+main(baby_yoda)
