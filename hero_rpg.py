@@ -20,6 +20,14 @@ class Character:
         if enemy.name != "Zombie":
             enemy.health -= self.power
         enemy.health -= self.power
+        damage = random.random() < self.damage_chance
+        if damage:
+            self.health -= enemy.power
+            print(f"{enemy.name} attacked {self.name}")
+
+        elif self.health == enemy.power:
+            print(f"{enemy.name} does no damage to {self.name}.")
+
         print(f"{self.name} does {self.power} damage to {enemy.name}.")
         if enemy.health <= 0:
             print(f"{enemy.name} is dead.")
@@ -87,22 +95,20 @@ class Shadow(Character):
         print(f"{self.name} does {self.power} damage to {enemy.name}.")
         
         
-        damage = random.random() < self.damage_chance
-        if damage:
-            self.health -= enemy.power
-            print(f"{enemy.name} attacked {self.name}")
-        # elif self.health <= 0:
-        #     print(f"{self.name} is dead.")
+        # damage = random.random() < self.damage_chance
+        # if damage:
+        #     self.health -= enemy.power
+        #     print(f"{enemy.name} attacked {self.name}")
 
-        else:
-            self.health == enemy.power
-            print(f"{enemy.name} does no damage to {self.name}.")
+        # else:
+        #     self.health == enemy.power
+        #     print(f"{enemy.name} does no damage to {self.name}.")
 
 hero = Hero("Neo", 2, 10, 0.2, 0, 0)
 goblin = Goblin("Goblin", 2, 9, 0, 0, 0)
 zombie = Zombie("Zombie", 2, 8, 0, 0, 0)
 medic = Medic("Medic", 2, 8, 0, 0.2, 0)
-shadow = Shadow("Shadow", 2, 10, 0, 0, 0.1)
+shadow = Shadow("Shadow", 2, 1, 0, 0, 0.1)
 
 
 
@@ -144,9 +150,10 @@ def main():
         elif raw_input == "4":
             #Hero attacks Zombie
             hero.attack(zombie)
+            print('You can\'t hurt Zombie!')
             #Zombie attacks Hero
             zombie.attack(hero)
-            zombie.print_status()
+            
         elif raw_input == "5":
             #Hero attacks Medic
             hero.attack(medic)
@@ -157,6 +164,8 @@ def main():
             
             shadow.attack(hero)
             shadow.print_status()
+            if hero.health <= 0:
+                print('You are dead!')
         else:
             print("Invalid input {}".format(raw_input))
 
