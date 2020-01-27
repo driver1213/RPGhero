@@ -51,7 +51,7 @@ class Hero(Character):
         crit_hit = random.random() < self.crit_hit_chance
         if crit_hit:
             enemy.health -= self.power*2
-            print(f'You do {self.power*2} damage to {enemy.name}.')
+            print(f'{self.name} does {self.power*2} damage to {enemy.name}.')
             
         else:
             enemy.health -= self.power
@@ -59,13 +59,13 @@ class Hero(Character):
 
 class Goblin(Character):
     def attack(self, enemy):
-        # enemy.health -= self.power
+        enemy.health -= self.power
         # print(f"{self.name} does {self.power} damage to {enemy.name}.")
         if enemy.health <= 0:
             print(f"{enemy.name} is dead.")
             
-        elif self.health <= 0:
-            print(f'{self.name} is dead!')
+        # elif self.health <= 0:
+        #     print(f'{self.name} is dead!')
 
 
 class Zombie(Character):
@@ -95,14 +95,10 @@ class Shadow(Character):
         print(f"{self.name} does {self.power} damage to {enemy.name}.")
         
         
-        # damage = random.random() < self.damage_chance
-        # if damage:
-        #     self.health -= enemy.power
-        #     print(f"{enemy.name} attacked {self.name}")
-
-        # else:
-        #     self.health == enemy.power
-        #     print(f"{enemy.name} does no damage to {self.name}.")
+class Baby_Yoda(Character):
+    def attak(self, enemy):
+        enemy.health -= self.power
+        print(f'{self.name} does {self.power} damage to {enemy.name}')
 
 hero = Hero("Neo", 2, 10, 0.2, 0, 0)
 goblin = Goblin("Goblin", 2, 9, 0, 0, 0)
